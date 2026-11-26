@@ -27,7 +27,7 @@ export function ProblemDraftForm() {
     <div className="draft-layout">
       <form className="panel form-stack" onSubmit={handlePreview}>
         <div className="form-field">
-          <label htmlFor="title">Problem title</label>
+          <label htmlFor="title">Problem title / idea title</label>
           <input
             id="title"
             name="title"

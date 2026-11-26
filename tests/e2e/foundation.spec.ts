@@ -59,7 +59,9 @@ test("mobile navigation opens the draft form and previews without publishing", a
   ).toBeHidden();
   await expect(page.locator("html")).toHaveJSProperty("scrollWidth", 390);
   await navigation.getByRole("link", { name: "Create" }).click();
-  await page.getByLabel("Problem title").fill("Open a community repair café");
+  await page
+    .getByLabel("Problem title / idea title", { exact: true })
+    .fill("Open a community repair café");
   await page
     .getByLabel("Description")
     .fill("Help neighbors learn how to repair household electronics.");
