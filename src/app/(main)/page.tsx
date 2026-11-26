@@ -1,6 +1,8 @@
 import { ArrowRight, ArrowUpRight, Compass, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { listProblems } from "@/features/problems/problem-data";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { ProblemCard } from "@/features/discovery/problem-card";
 import {
   exploreCategoryHref,
@@ -8,7 +10,11 @@ import {
   sampleProblems,
 } from "@/features/discovery/sample-problems";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createServerSupabaseClient({ readOnly: true });
+  const live = supabase ? await listProblems(supabase, { pageSize: 6 }) : null;
+  const problems = live?.problems ?? sampleProblems;
+
   return (
     <>
       <section className="hero" aria-labelledby="hero-title">
@@ -53,10 +59,10 @@ export default function HomePage() {
           </Link>
         </div>
         <ul className="category-grid">
-          {featuredCategories.map(({ name, icon: Icon, color }) => (
+          {featuredCategories.map(({ name, slug, icon: Icon, color }) => (
             <li key={name}>
               <Link
-                href={exploreCategoryHref(name)}
+                href={exploreCategoryHref(supabase ? slug : name)}
                 className={`category-link tone-${color}`}
               >
                 <Icon size={21} strokeWidth={1.9} aria-hidden="true" />{" "}
@@ -75,18 +81,37 @@ export default function HomePage() {
             </h2>
             <p>
               Find an idea you’d like to help bring to life.{" "}
-              <span className="sample-label">Sample problems</span>
+              {!supabase && (
+                <span className="sample-label">Sample problems</span>
+              )}
             </p>
           </div>
           <Link href="/explore" className="button button-outline button-small">
             View all problems <ArrowRight size={17} aria-hidden="true" />
           </Link>
         </div>
-        <div className="problem-grid">
-          {sampleProblems.map((problem) => (
-            <ProblemCard key={problem.slug} problem={problem} />
-          ))}
-        </div>
+        {live?.error ? (
+          <p className="notice form-error" role="alert">
+            We couldn’t load the feed. Refresh the page to try again.
+          </p>
+        ) : problems.length ? (
+          <div className="problem-grid">
+            {problems.map((problem) => (
+              <ProblemCard key={problem.slug} problem={problem} />
+            ))}
+          </div>
+        ) : (
+          <div className="empty-state">
+            <h3>Be the first to post a problem</h3>
+            <p>
+              Tell other builders what you want to tackle and where you need
+              help.
+            </p>
+            <Link href="/create" className="button button-primary">
+              Post a problem
+            </Link>
+          </div>
+        )}
       </section>
     </>
   );

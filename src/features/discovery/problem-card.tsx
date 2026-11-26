@@ -1,20 +1,35 @@
-import { ArrowUpRight, UsersRound } from "lucide-react";
+import { ArrowUpRight, Sparkles, UsersRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { SampleProblem } from "./sample-problems";
 
-export function ProblemCard({ problem }: { problem: SampleProblem }) {
+export type ProblemCardData = Omit<
+  SampleProblem,
+  "category" | "context" | "image"
+> & {
+  category: string;
+  image?: string;
+  availability?: string;
+};
+
+export function ProblemCard({ problem }: { problem: ProblemCardData }) {
   const href = `/problems/${problem.slug}`;
 
   return (
     <article className="problem-card">
       <div className={`card-cover tone-${problem.color}`}>
-        <Image
-          src={problem.image}
-          alt=""
-          fill
-          sizes="(max-width: 530px) 92vw, (max-width: 820px) 46vw, 400px"
-        />
+        {problem.image ? (
+          <Image
+            src={problem.image}
+            alt=""
+            fill
+            sizes="(max-width: 530px) 92vw, (max-width: 820px) 46vw, 400px"
+          />
+        ) : (
+          <div className="card-illustration" aria-hidden="true">
+            <Sparkles size={42} strokeWidth={1.3} />
+          </div>
+        )}
         <span className="cover-label">{problem.category}</span>
       </div>
       <div className="card-body">
@@ -27,7 +42,7 @@ export function ProblemCard({ problem }: { problem: SampleProblem }) {
         <h3>
           <Link href={href}>{problem.title}</Link>
         </h3>
-        <p>{problem.description}</p>
+        <p className="card-description">{problem.description}</p>
         <ul className="skills" aria-label="Skills needed">
           {problem.skills.map((skill) => (
             <li key={skill}>{skill}</li>
@@ -35,7 +50,8 @@ export function ProblemCard({ problem }: { problem: SampleProblem }) {
         </ul>
         <div className="card-footer">
           <span>
-            <UsersRound size={16} aria-hidden="true" /> {problem.purpose}
+            <UsersRound size={16} aria-hidden="true" />{" "}
+            {problem.availability ?? problem.purpose}
           </span>
           <Link
             href={href}

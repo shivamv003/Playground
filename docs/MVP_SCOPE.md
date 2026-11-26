@@ -12,9 +12,12 @@
 - Onboarding with username, display name, skills, and interests. Profiles have a public URL and account email stays private.
 - Google sign-in is available when the provider is configured.
 
-## Remaining core workflow milestones
-- Live public problem feed, creation, editing, archiving, and collaboration availability.
-- Pending, accepted, declined, and cancelled requests with participant authorization and in-app activity.
-- Explicit contact sharing and revocation, blocking and reporting, and multi-user authorization tests.
+## Launch features delivered
 
-Likes, comments, bookmarks, richer search, and recommendations follow the core workflow. Dark mode, PWA support, native apps, and advanced recommendations are deferred.
+- Live public discovery, keyword and category search, pagination, publishing, editing, and archiving.
+- Request history and activity, accept and decline decisions, cancellation, and disconnection.
+- Explicit contact sharing, revocation, blocking, reports, moderation, and database permission tests.
+
+Hosted projects require configuration, deployment, and acceptance checks. Follow the [launch runbook](LAUNCH.md).
+
+Likes, comments, bookmarks, richer recommendations, dark mode, PWA support, and native apps remain later product milestones.

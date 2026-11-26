@@ -991,3 +991,154 @@ button:disabled {
     transition-duration: 0.01ms !important;
   }
 }
+
+.card-description {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow-wrap: anywhere;
+}
+
+.card-illustration {
+  display: grid;
+  height: 100%;
+  min-height: inherit;
+  place-items: center;
+}
+
+.pagination,
+.problem-management,
+.request-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pagination {
+  justify-content: center;
+  margin-block: 24px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.problem-management {
+  margin-block: 16px;
+}
+.my-posts-create {
+  margin-bottom: 16px;
+}
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  font-size: 14px;
+}
+
+.form-details summary,
+.safety-actions summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+.form-details .form-stack,
+.safety-actions form {
+  margin-top: 12px;
+}
+
+.user-copy {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.collaboration-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.collaboration-details div {
+  min-width: 120px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-small);
+}
+.collaboration-details dt {
+  font-size: 12px;
+  color: var(--muted);
+}
+.collaboration-details dd {
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.connection-panel,
+.safety-actions,
+.recent-activity,
+.activity-section {
+  margin-top: 18px;
+}
+.connection-panel {
+  display: grid;
+  gap: 12px;
+}
+.connection-panel h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.connection-panel h2 svg {
+  flex: none;
+}
+.safety-block,
+.contact-sharing {
+  border-top: 1px solid var(--line);
+  margin-top: 14px;
+  padding-top: 14px;
+}
+
+.recent-activity ul,
+.activity-grid,
+.contact-sharing,
+.shared-details {
+  display: grid;
+  gap: 10px;
+}
+.recent-activity ul {
+  margin-top: 10px;
+}
+.activity-section h2 {
+  font-size: 23px;
+  margin-bottom: 10px;
+}
+.activity-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 325px), 1fr));
+}
+.request-card {
+  min-width: 0;
+}
+.request-card h3 {
+  font-size: 21px;
+  overflow-wrap: anywhere;
+}
+.request-card .section-heading {
+  margin-bottom: 6px;
+}
+.request-message,
+.request-actions,
+.request-card > form {
+  margin-top: 12px;
+}
+.shared-details li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-small);
+}
+.shared-details li > p {
+  min-width: 0;
+}

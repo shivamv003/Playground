@@ -55,7 +55,10 @@ export default async function ProfilePage() {
     );
   }
 
-  const { data: profile, error } = await findOwnProfile(supabase, userId);
+  const [{ data: profile, error }, moderation] = await Promise.all([
+    findOwnProfile(supabase, userId),
+    supabase.rpc("is_playground_moderator"),
+  ]);
   return (
     <section
       className="panel profile-overview"
@@ -74,6 +77,14 @@ export default async function ProfilePage() {
             >
               View public profile
             </Link>
+            <Link className="button button-outline" href="/my-posts">
+              My posts
+            </Link>
+            {moderation.data && (
+              <Link className="button button-outline" href="/moderation">
+                Moderation
+              </Link>
+            )}
           </div>
         </>
       ) : (

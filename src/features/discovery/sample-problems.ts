@@ -8,12 +8,27 @@ import {
 } from "lucide-react";
 
 export const featuredCategories = [
-  { name: "Sustainability", icon: Leaf, color: "mint" },
-  { name: "Education", icon: BookOpen, color: "peach" },
-  { name: "Accessibility", icon: Accessibility, color: "lilac" },
-  { name: "Software", icon: CodeXml, color: "butter" },
-  { name: "Design", icon: Palette, color: "rose" },
-  { name: "Social Impact", icon: HeartHandshake, color: "sky" },
+  { name: "Sustainability", slug: "sustainability", icon: Leaf, color: "mint" },
+  { name: "Education", slug: "education", icon: BookOpen, color: "peach" },
+  {
+    name: "Accessibility",
+    slug: "accessibility",
+    icon: Accessibility,
+    color: "lilac",
+  },
+  {
+    name: "Software",
+    slug: "software-development",
+    icon: CodeXml,
+    color: "butter",
+  },
+  { name: "Design", slug: "design", icon: Palette, color: "rose" },
+  {
+    name: "Social Impact",
+    slug: "social-impact",
+    icon: HeartHandshake,
+    color: "sky",
+  },
 ] as const;
 
 export type Category = (typeof featuredCategories)[number]["name"];
@@ -80,6 +95,6 @@ export const sampleProblems: SampleProblem[] = [
   },
 ];
 
-export function exploreCategoryHref(category: Category) {
+export function exploreCategoryHref(category: string) {
   return `/explore?category=${encodeURIComponent(category)}`;
 }

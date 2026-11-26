@@ -15,7 +15,7 @@ npm run dev
 
 Open http://localhost:3000. Guest browsing, search, category filtering, sample problem details, and the problem draft preview run without an account or a database. The preview lives in the current page and is discarded on navigation.
 
-With Supabase configured, people can create and verify an email account, log in, reset their password, and publish an editable profile. Guest discovery still uses sample data. Live problem publishing, connection requests, activity, and contact exchange are later milestones.
+With Supabase configured, people can verify accounts, edit profiles, publish problems, request connections, and share contact details after acceptance. Home and Explore read published posts from the database. An empty database starts with an empty feed. When Supabase is absent, the app shows a labeled sample feed and a draft preview.
 
 ## Checks
 
@@ -31,7 +31,7 @@ Playwright starts the production build on port 3100. Set `PLAYWRIGHT_CHROMIUM_EX
 
 ## Supabase development
 
-1. Install the [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started) and start Docker. Run `supabase start` from the repo root to apply both migrations and launch the local email inbox. If the stack already exists, restart it to pick up template changes and run `supabase migration up` for pending migrations.
+1. Install the [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started) and start Docker. Run `supabase start` from the repo root to apply all migrations and launch the local email inbox. If the stack already exists, restart it to pick up template changes and run `supabase migration up` for pending migrations.
 2. Copy `.env.example` to `.env.local`. Set the URL and publishable key from `supabase status`. Older local CLIs may show the public `anon` key instead. Keep privileged keys out of browser variables and Git.
 3. Use the same app origin for `NEXT_PUBLIC_APP_URL` and the address you open in your browser. The default is `http://localhost:3000`. Restart Next.js when changing configuration.
 4. Open the Mailpit URL shown by `supabase status` to complete confirmation and password reset in development.
@@ -41,24 +41,27 @@ Run the PostgreSQL permission checks against your local Supabase database using 
 ```sh
 psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/integration/categories.sql
 psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/integration/profiles.sql
+psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/integration/launch.sql
 ```
 
-Run the account browser suite against the local Supabase stack and Mailpit. Use a dedicated local test database because the suite creates an account and profile.
+Run the account browser suite against the local Supabase stack and Mailpit. Use a dedicated local test database because the suite creates accounts, profiles, and posts.
 
 ```sh
 NEXT_PUBLIC_APP_URL=http://127.0.0.1:3100 npm run build
 NEXT_PUBLIC_APP_URL=http://127.0.0.1:3100 PLAYWRIGHT_MAILPIT_URL=http://127.0.0.1:54324 npm test
 ```
 
-Without `PLAYWRIGHT_MAILPIT_URL`, Playwright runs the guest and return-path checks and skips the live account journey.
+Without `PLAYWRIGHT_MAILPIT_URL`, Playwright runs the guest and return-path checks and skips the tests that create accounts and posts.
 
 ## Hosted Supabase and Vercel
 
-1. Apply both migrations to your Supabase project and enable email confirmation. Set the minimum password length to at least 8.
+1. Apply all migrations to your Supabase project and enable email confirmation. Set the minimum password length to at least 8.
 2. In Supabase Auth, set the Site URL to your HTTPS app origin. Allow the app's `/auth/confirm`, `/reset-password`, and `/auth/callback` paths, including the `next` query string. Add each preview origin explicitly if it needs working auth.
 3. Copy [confirmation.html](supabase/templates/confirmation.html) and [recovery.html](supabase/templates/recovery.html) into the corresponding Supabase email templates. The app supplies the destination through `RedirectTo` and verifies the one-time `TokenHash`. Configure your email provider for production delivery.
 4. Set the three public variables from `.env.example` in the Vercel environment and rebuild. Use the app's HTTPS origin for `NEXT_PUBLIC_APP_URL`.
 5. For optional Google sign-in, enable the Google provider in Supabase and configure Google's authorized redirect URI as the Supabase callback URL shown in the provider settings. Set `PLAYGROUND_GOOGLE_SIGN_IN=true` in Vercel after the provider is ready.
+
+See the [launch runbook](docs/LAUNCH.md) for migration order, Google setup, moderation, and production smoke checks.
 
 Profiles are public by design. The email used to sign up stays in Supabase Auth and is excluded from all public profile queries.
 

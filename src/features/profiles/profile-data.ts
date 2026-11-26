@@ -22,10 +22,10 @@ export function findPublicProfile(
 ) {
   return supabase
     .from("profiles")
-    .select(profileFields)
+    .select(`id, ${profileFields}`)
     .eq("username", username)
     .maybeSingle()
-    .overrideTypes<ProfileContent, { merge: false }>();
+    .overrideTypes<ProfileContent & { id: string }, { merge: false }>();
 }
 
 export function saveOwnProfile(

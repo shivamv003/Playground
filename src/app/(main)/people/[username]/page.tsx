@@ -1,4 +1,7 @@
 import { notFound } from "next/navigation";
+import { getViewerId } from "@/features/auth/viewer";
+import { findOwnBlock } from "@/features/connections/connection-data";
+import { SafetyActions } from "@/features/moderation/safety-actions";
 import { findPublicProfile } from "@/features/profiles/profile-data";
 import { ProfileSummary } from "@/features/profiles/profile-summary";
 import { usernamePattern } from "@/features/profiles/profile-validation";
@@ -25,9 +28,23 @@ export default async function PublicProfilePage({
   }
   if (!data) notFound();
 
+  const viewerId = await getViewerId();
+  const block =
+    viewerId && viewerId !== data.id
+      ? await findOwnBlock(supabase, data.id)
+      : null;
+
   return (
     <article className="panel profile-overview">
       <ProfileSummary profile={data} />
+      {block && !block.error && (
+        <SafetyActions
+          target={{ kind: "profile", id: data.id }}
+          authorId={data.id}
+          blocked={Boolean(block.data)}
+          next={`/people/${username}`}
+        />
+      )}
     </article>
   );
 }

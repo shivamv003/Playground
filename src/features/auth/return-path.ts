@@ -1,6 +1,6 @@
 const returnOrigin = "https://playground.invalid";
 const allowedPath =
-  /^\/(?:explore|create|activity|profile(?:\/edit)?|problems\/[a-zA-Z0-9-]+|people\/[a-z0-9_]+)?$/;
+  /^\/(?:explore|create|activity|my-posts|moderation|profile(?:\/edit)?|problems\/[a-zA-Z0-9-]+(?:\/edit)?|people\/[a-z0-9_]+)?$/;
 
 export function safeReturnPath(value: unknown) {
   if (
